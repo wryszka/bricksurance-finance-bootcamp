@@ -1,0 +1,589 @@
+{
+ "datasets": [
+  {
+   "name": "ds_costs",
+   "displayName": "Costs against budget",
+   "queryLines": [
+    "SELECT to_date(concat(period, '-01')) AS month, period, company_name, cost_centre_name, account_name, ",
+    "       actual_gbp, budget_gbp, variance_gbp ",
+    "FROM __SCHEMA__.`2_actual_vs_budget` ",
+    "WHERE account_type = 'Expense' AND account_code <> '5000' "
+   ]
+  },
+  {
+   "name": "ds_top",
+   "displayName": "Biggest overspends",
+   "queryLines": [
+    "SELECT account_name, period, round(sum(actual_gbp)) AS actual_gbp, round(sum(budget_gbp)) AS budget_gbp, ",
+    "       round(sum(variance_gbp)) AS variance_gbp ",
+    "FROM __SCHEMA__.`2_actual_vs_budget` ",
+    "WHERE account_type = 'Expense' AND account_code <> '5000' ",
+    "GROUP BY account_name, period ORDER BY variance_gbp DESC LIMIT 10 "
+   ]
+  }
+ ],
+ "pages": [
+  {
+   "name": "costs",
+   "displayName": "Costs against budget",
+   "pageType": "PAGE_TYPE_CANVAS",
+   "layoutVersion": "GRID_V1",
+   "layout": [
+    {
+     "widget": {
+      "name": "title",
+      "multilineTextboxSpec": {
+       "lines": [
+        "## Costs against budget \u2014 January to October 2026"
+       ]
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 0,
+      "width": 12,
+      "height": 1
+     }
+    },
+    {
+     "widget": {
+      "name": "subtitle",
+      "multilineTextboxSpec": {
+       "lines": [
+        "Operating costs excluding claims paid. Variance = actual minus budget, so a positive variance is an overspend. Synthetic data."
+       ]
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 1,
+      "width": 12,
+      "height": 1
+     }
+    },
+    {
+     "widget": {
+      "name": "filter_company",
+      "queries": [
+       {
+        "name": "ds_costs_company_name",
+        "query": {
+         "datasetName": "ds_costs",
+         "fields": [
+          {
+           "name": "company_name",
+           "expression": "`company_name`"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "filter-multi-select",
+       "encodings": {
+        "fields": [
+         {
+          "fieldName": "company_name",
+          "displayName": "Company",
+          "queryName": "ds_costs_company_name"
+         }
+        ]
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Company"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 2,
+      "width": 6,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "filter_cc",
+      "queries": [
+       {
+        "name": "ds_costs_cost_centre_name",
+        "query": {
+         "datasetName": "ds_costs",
+         "fields": [
+          {
+           "name": "cost_centre_name",
+           "expression": "`cost_centre_name`"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "filter-multi-select",
+       "encodings": {
+        "fields": [
+         {
+          "fieldName": "cost_centre_name",
+          "displayName": "Cost centre",
+          "queryName": "ds_costs_cost_centre_name"
+         }
+        ]
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Cost centre"
+       }
+      }
+     },
+     "position": {
+      "x": 6,
+      "y": 2,
+      "width": 6,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "kpi_actual",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "ds_costs",
+         "fields": [
+          {
+           "name": "sum(actual_gbp)",
+           "expression": "SUM(`actual_gbp`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "sum(actual_gbp)",
+         "displayName": "Actual",
+         "format": {
+          "type": "number-currency",
+          "currencyCode": "GBP",
+          "abbreviation": "compact",
+          "decimalPlaces": {
+           "type": "max",
+           "places": 1
+          }
+         }
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Actual"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 4,
+      "width": 4,
+      "height": 3
+     }
+    },
+    {
+     "widget": {
+      "name": "kpi_budget",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "ds_costs",
+         "fields": [
+          {
+           "name": "sum(budget_gbp)",
+           "expression": "SUM(`budget_gbp`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "sum(budget_gbp)",
+         "displayName": "Budget",
+         "format": {
+          "type": "number-currency",
+          "currencyCode": "GBP",
+          "abbreviation": "compact",
+          "decimalPlaces": {
+           "type": "max",
+           "places": 1
+          }
+         }
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Budget"
+       }
+      }
+     },
+     "position": {
+      "x": 4,
+      "y": 4,
+      "width": 4,
+      "height": 3
+     }
+    },
+    {
+     "widget": {
+      "name": "kpi_variance",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "ds_costs",
+         "fields": [
+          {
+           "name": "sum(variance_gbp)",
+           "expression": "SUM(`variance_gbp`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "sum(variance_gbp)",
+         "displayName": "Variance (overspend)",
+         "format": {
+          "type": "number-currency",
+          "currencyCode": "GBP",
+          "abbreviation": "compact",
+          "decimalPlaces": {
+           "type": "max",
+           "places": 1
+          }
+         }
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Variance (overspend)"
+       }
+      }
+     },
+     "position": {
+      "x": 8,
+      "y": 4,
+      "width": 4,
+      "height": 3
+     }
+    },
+    {
+     "widget": {
+      "name": "trend",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "ds_costs",
+         "fields": [
+          {
+           "name": "month",
+           "expression": "`month`"
+          },
+          {
+           "name": "sum(actual_gbp)",
+           "expression": "SUM(`actual_gbp`)"
+          },
+          {
+           "name": "sum(budget_gbp)",
+           "expression": "SUM(`budget_gbp`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "line",
+       "encodings": {
+        "x": {
+         "fieldName": "month",
+         "scale": {
+          "type": "temporal"
+         },
+         "displayName": "Month"
+        },
+        "y": {
+         "scale": {
+          "type": "quantitative"
+         },
+         "fields": [
+          {
+           "fieldName": "sum(actual_gbp)",
+           "displayName": "Actual"
+          },
+          {
+           "fieldName": "sum(budget_gbp)",
+           "displayName": "Budget"
+          }
+         ]
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Actual against budget by month"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 7,
+      "width": 6,
+      "height": 6
+     }
+    },
+    {
+     "widget": {
+      "name": "variance_by_account",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "ds_costs",
+         "fields": [
+          {
+           "name": "account_name",
+           "expression": "`account_name`"
+          },
+          {
+           "name": "sum(variance_gbp)",
+           "expression": "SUM(`variance_gbp`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "sum(variance_gbp)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Variance (GBP)"
+        },
+        "y": {
+         "fieldName": "account_name",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "Account"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Variance by account (right of zero = overspend)"
+       }
+      }
+     },
+     "position": {
+      "x": 6,
+      "y": 7,
+      "width": 6,
+      "height": 6
+     }
+    },
+    {
+     "widget": {
+      "name": "variance_by_month",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "ds_costs",
+         "fields": [
+          {
+           "name": "month",
+           "expression": "`month`"
+          },
+          {
+           "name": "account_name",
+           "expression": "`account_name`"
+          },
+          {
+           "name": "sum(variance_gbp)",
+           "expression": "SUM(`variance_gbp`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "month",
+         "scale": {
+          "type": "temporal"
+         },
+         "displayName": "Month"
+        },
+        "y": {
+         "fieldName": "sum(variance_gbp)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Variance (GBP)"
+        },
+        "color": {
+         "fieldName": "account_name",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "Account"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Where the variance came from, month by month"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 13,
+      "width": 12,
+      "height": 6
+     }
+    },
+    {
+     "widget": {
+      "name": "top_overspends",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "ds_top",
+         "fields": [
+          {
+           "name": "account_name",
+           "expression": "`account_name`"
+          },
+          {
+           "name": "period",
+           "expression": "`period`"
+          },
+          {
+           "name": "actual_gbp",
+           "expression": "`actual_gbp`"
+          },
+          {
+           "name": "budget_gbp",
+           "expression": "`budget_gbp`"
+          },
+          {
+           "name": "variance_gbp",
+           "expression": "`variance_gbp`"
+          }
+         ],
+         "disaggregated": true
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "table",
+       "encodings": {
+        "columns": [
+         {
+          "fieldName": "account_name",
+          "displayName": "Account"
+         },
+         {
+          "fieldName": "period",
+          "displayName": "Month"
+         },
+         {
+          "fieldName": "actual_gbp",
+          "displayName": "Actual (GBP)"
+         },
+         {
+          "fieldName": "budget_gbp",
+          "displayName": "Budget (GBP)"
+         },
+         {
+          "fieldName": "variance_gbp",
+          "displayName": "Overspend (GBP)"
+         }
+        ]
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Ten biggest overspends (all companies; not affected by the filters)"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 19,
+      "width": 12,
+      "height": 6
+     }
+    }
+   ]
+  }
+ ],
+ "uiSettings": {
+  "theme": {
+   "canvasBackgroundColor": {
+    "light": "#FCFCFC",
+    "dark": "#1F272D"
+   },
+   "widgetBackgroundColor": {
+    "light": "#FFFFFF",
+    "dark": "#11171C"
+   },
+   "fontColor": {
+    "light": "#11171C",
+    "dark": "#E8ECF0"
+   },
+   "selectionColor": {
+    "light": "#2272B4",
+    "dark": "#8ACAFF"
+   },
+   "visualizationColors": [
+    "#0072B2",
+    "#E69F00",
+    "#009E73",
+    "#CC79A7",
+    "#D55E00",
+    "#56B4E9",
+    "#7F7F7F"
+   ],
+   "widgetHeaderAlignment": "LEFT"
+  }
+ }
+}

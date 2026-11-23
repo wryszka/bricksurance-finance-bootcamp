@@ -1,0 +1,8 @@
+command: ["streamlit", "run", "app.py"]
+env:
+  # The SQL warehouse you add to the app as a resource (resource key: sql-warehouse)
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  # CHANGE THIS to your own catalog.schema (the C1 notebook prints it for you)
+  - name: BOOTCAMP_SCHEMA
+    value: "workspace.finance_yourname"

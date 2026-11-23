@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<AlteryxDocument yxmdVer="2023.1">
+  <!-- SYNTHETIC EXAMPLE written for this bootcamp. Not a real company's workflow. -->
+  <Nodes>
+    <Node ToolID="1">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput"><Position x="54" y="90" /></GuiSettings>
+      <Properties>
+        <Configuration><File>\\finshare\month_end\extracts\purchase_orders.csv</File></Configuration>
+        <Annotation><Name>PO extract</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="2">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput"><Position x="54" y="270" /></GuiSettings>
+      <Properties>
+        <Configuration><File>\\finshare\month_end\extracts\supplier_invoices.csv</File></Configuration>
+        <Annotation><Name>Invoice extract</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="3">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Filter.Filter"><Position x="186" y="90" /></GuiSettings>
+      <Properties>
+        <Configuration>
+          <Mode>Custom</Mode>
+          <Expression>[po_status] != "Cancelled" AND !IsNull([goods_received_date]) AND [goods_received_date] &lt;= "2026-10-31"</Expression>
+        </Configuration>
+        <Annotation><Name>Live POs with goods received by period end</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="4">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Filter.Filter"><Position x="186" y="270" /></GuiSettings>
+      <Properties>
+        <Configuration>
+          <Mode>Custom</Mode>
+          <Expression>[invoice_date] &lt;= "2026-10-31"</Expression>
+        </Configuration>
+        <Annotation><Name>Invoices dated in or before the period</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="5">
+      <GuiSettings Plugin="AlteryxSpatialPluginsGui.Summarize.Summarize"><Position x="318" y="270" /></GuiSettings>
+      <Properties>
+        <Configuration>
+          <SummarizeFields>
+            <SummarizeField field="po_id" action="GroupBy" rename="po_id" />
+            <SummarizeField field="invoice_amount_gbp" action="Sum" rename="invoiced_gbp" />
+          </SummarizeFields>
+        </Configuration>
+        <Annotation><Name>Invoiced to date per PO</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="6">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Join.Join"><Position x="450" y="162" /></GuiSettings>
+      <Properties>
+        <Configuration joinByRecordPos="False">
+          <JoinInfo connection="Left"><Field field="po_id" /></JoinInfo>
+          <JoinInfo connection="Right"><Field field="po_id" /></JoinInfo>
+        </Configuration>
+        <Annotation><Name>Match invoices to POs (J = matched, L = PO with no invoice)</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="7">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Union.Union"><Position x="582" y="162" /></GuiSettings>
+      <Properties>
+        <Configuration><Mode>ByName</Mode></Configuration>
+        <Annotation><Name>Matched + uninvoiced POs back together</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="8">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula"><Position x="714" y="162" /></GuiSettings>
+      <Properties>
+        <Configuration>
+          <FormulaFields>
+            <FormulaField field="accrual_gbp" type="FixedDecimal" size="19.2"
+                          expression="[po_amount_gbp] - IIF(IsNull([invoiced_gbp]), 0, [invoiced_gbp])" />
+          </FormulaFields>
+        </Configuration>
+        <Annotation><Name>Accrual = received but not yet invoiced</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="9">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Filter.Filter"><Position x="846" y="162" /></GuiSettings>
+      <Properties>
+        <Configuration><Mode>Custom</Mode><Expression>[accrual_gbp] &gt; 0</Expression></Configuration>
+        <Annotation><Name>Only POs with something left to accrue</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="10">
+      <GuiSettings Plugin="AlteryxSpatialPluginsGui.Summarize.Summarize"><Position x="978" y="162" /></GuiSettings>
+      <Properties>
+        <Configuration>
+          <SummarizeFields>
+            <SummarizeField field="company_code" action="GroupBy" rename="company_code" />
+            <SummarizeField field="cost_centre" action="GroupBy" rename="cost_centre" />
+            <SummarizeField field="po_id" action="Count" rename="po_count" />
+            <SummarizeField field="accrual_gbp" action="Sum" rename="accrual_gbp" />
+          </SummarizeFields>
+        </Configuration>
+        <Annotation><Name>Accrual by company and cost centre</Name></Annotation>
+      </Properties>
+    </Node>
+    <Node ToolID="11">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput"><Position x="1110" y="162" /></GuiSettings>
+      <Properties>
+        <Configuration><File>\\finshare\month_end\output\accruals_summary_2026_10.xlsx|||Accruals</File></Configuration>
+        <Annotation><Name>Accruals summary for the journal</Name></Annotation>
+      </Properties>
+    </Node>
+  </Nodes>
+  <Connections>
+    <Connection><Origin ToolID="1" Connection="Output" /><Destination ToolID="3" Connection="Input" /></Connection>
+    <Connection><Origin ToolID="2" Connection="Output" /><Destination ToolID="4" Connection="Input" /></Connection>
+    <Connection><Origin ToolID="4" Connection="True" /><Destination ToolID="5" Connection="Input" /></Connection>
+    <Connection><Origin ToolID="3" Connection="True" /><Destination ToolID="6" Connection="Left" /></Connection>
+    <Connection><Origin ToolID="5" Connection="Output" /><Destination ToolID="6" Connection="Right" /></Connection>
+    <Connection><Origin ToolID="6" Connection="Join" /><Destination ToolID="7" Connection="Input" /></Connection>
+    <Connection><Origin ToolID="6" Connection="Left" /><Destination ToolID="7" Connection="Input" /></Connection>
+    <Connection><Origin ToolID="7" Connection="Output" /><Destination ToolID="8" Connection="Input" /></Connection>
+    <Connection><Origin ToolID="8" Connection="Output" /><Destination ToolID="9" Connection="Input" /></Connection>
+    <Connection><Origin ToolID="9" Connection="True" /><Destination ToolID="10" Connection="Input" /></Connection>
+    <Connection><Origin ToolID="10" Connection="Output" /><Destination ToolID="11" Connection="Input" /></Connection>
+  </Connections>
+  <Properties>
+    <MetaInfo><Name>PO accruals - month end</Name>
+      <Description>Runs on working day 1. Owner: Finance Operations. Period end date is typed into tools 3 and 4 by hand each month.</Description>
+    </MetaInfo>
+  </Properties>
+</AlteryxDocument>
