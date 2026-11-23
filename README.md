@@ -21,7 +21,8 @@ every one with a solved version.
 - **Runs anywhere**, including **Databricks Free Edition**: plain notebooks, serverless compute,
   nothing to install, no external data.
 
-Start with **[ATTENDEE_GUIDE.md](ATTENDEE_GUIDE.md)**.
+Start with **[ATTENDEE_GUIDE.md](ATTENDEE_GUIDE.md)** — every exercise, step by step. It is generated from the
+exercise notebooks (`python3 tools/build_attendee_guide.py`), so the two never drift.
 
 ## The exercises
 
@@ -48,12 +49,20 @@ It is month-end close for October 2026.
 
 ## Suggested agenda (5 hours)
 
+No slides-first introduction: each part opens with a 15-minute live demo of what to use and
+where to find it, then everyone builds.
+
 | Time | Session |
 |---|---|
-| 10:00 | Setup (10 min), then **Track A — Lakeflow Designer**. Suggested: A1, then choose from A2–A6 |
+| 10:00 | Setup together (10 min) |
+| 10:10 | **Demo: Lakeflow Designer** (15 min) |
+| 10:25 | **Track A — Lakeflow Designer.** A1, then choose from A2–A6 |
 | 12:00 | Lunch |
-| 12:30 | **Track B — Genie Code & agents**. Suggested: B1 or B2, then B3 |
-| 14:00 | **Track C — Apps**. Suggested: C1, or C2 if you live with spreadsheets |
+| 12:30 | **Demo: Genie Code & agents** (15 min) |
+| 12:45 | **Track B — Genie Code & agents.** B1 or B2, then B3 |
+| 14:00 | **Demo: Apps** (15 min) |
+| 14:15 | **Track C — Apps.** C1, or C2 if you live with spreadsheets |
+| 14:55 | Wrap-up |
 | 15:00 | Close |
 
 ## Setup (once, about 5 minutes)
