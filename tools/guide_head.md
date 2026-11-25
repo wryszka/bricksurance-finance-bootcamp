@@ -26,18 +26,17 @@ table) and **serverless compute** (nothing to size, start or manage).
 
 ## The day
 
-| Time | What happens |
-|---|---|
-| 10:00 | **Setup** together (10 minutes) |
-| 10:10 | **Demo: Lakeflow Designer** — what to use and where to find it (15 minutes) |
-| 10:25 | **Your turn — Track A.** Start with A1, then choose |
-| 12:00 | Lunch |
-| 12:30 | **Demo: Genie Code & agents** (15 minutes) |
-| 12:45 | **Your turn — Track B.** B1 or B2, then B3 |
-| 14:00 | **Demo: Apps** (15 minutes) |
-| 14:15 | **Your turn — Track C.** C1, or C2 if you live with spreadsheets |
-| 14:55 | Wrap-up: what to take home |
-| 15:00 | Close |
+No clock to fight. The day runs in this order, and each part takes as long as it takes.
+
+1. **Setup**, together.
+2. **Demo: Lakeflow Designer** — what to use and where to find it.
+3. **Your turn — Track A.** Start with A1, then choose.
+4. Lunch.
+5. **Demo: Genie Code & agents.**
+6. **Your turn — Track B.** B1 or B2, then B3.
+7. **Demo: Apps.**
+8. **Your turn — Track C.** C1, or C2 if you live with spreadsheets.
+9. Wrap-up: what to take home.
 
 ## How today works
 
@@ -46,6 +45,8 @@ table) and **serverless compute** (nothing to size, start or manage).
 - **Times are a guide, not a deadline.** Doing two exercises properly beats rushing through five.
 - **Stuck for more than five minutes? Open the solution.** Same name, in the `solutions` folder.
   It has the steps, a prompt that works, and code you can run to catch up. That isn't cheating.
+- **Short on time?** The appendix at the end of this guide has the full prompt for every exercise
+  that one prompt can build.
 - **Wave at a facilitator** whenever you like.
 
 ## Choose your exercises
@@ -78,7 +79,7 @@ table) and **serverless compute** (nothing to size, start or manage).
 4. Top right: **Connect → Serverless**.
 5. Click **Run all**. It takes about two minutes.
 
-✅ **You are ready when** the last cell lists 14 tables. Open **Catalog** in the left sidebar and
+✅ **You are ready when** the last cell lists 15 tables. Open **Catalog** in the left sidebar and
 find your schema, `finance_<your name>`. Everything today lives there, and it is yours alone:
 you cannot break anybody else's data, and they cannot break yours.
 

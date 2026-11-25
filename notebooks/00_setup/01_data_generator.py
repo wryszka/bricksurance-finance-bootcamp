@@ -471,7 +471,7 @@ save(requests, "3_journal_requests",
 # MAGIC %md
 # MAGIC ## Done
 # MAGIC
-# MAGIC Open **Catalog** in the left-hand menu and find your schema — you should see 14 tables
+# MAGIC Open **Catalog** in the left-hand menu and find your schema — you should see 15 tables
 # MAGIC and a `raw` volume with ten files under `gl/`. Now pick any exercise.
 
 # COMMAND ----------

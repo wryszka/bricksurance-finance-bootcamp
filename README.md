@@ -47,30 +47,27 @@ It is month-end close for October 2026.
 | C2 | Retire a spreadsheet | take a VBA macro apart, find its bug, rebuild it as a table and an app | 40 min |
 | C3 | Genie App Builder | the same app with no code and no deploy step (where enabled) | 20 min |
 
-## Suggested agenda (5 hours)
+## Suggested running order
 
-No slides-first introduction: each part opens with a 15-minute live demo of what to use and
-where to find it, then everyone builds.
+No slides-first introduction and no fixed clock: each part opens with a short live demo of what
+to use and where to find it, then everyone builds.
 
-| Time | Session |
-|---|---|
-| 10:00 | Setup together (10 min) |
-| 10:10 | **Demo: Lakeflow Designer** (15 min) |
-| 10:25 | **Track A — Lakeflow Designer.** A1, then choose from A2–A6 |
-| 12:00 | Lunch |
-| 12:30 | **Demo: Genie Code & agents** (15 min) |
-| 12:45 | **Track B — Genie Code & agents.** B1 or B2, then B3 |
-| 14:00 | **Demo: Apps** (15 min) |
-| 14:15 | **Track C — Apps.** C1, or C2 if you live with spreadsheets |
-| 14:55 | Wrap-up |
-| 15:00 | Close |
+1. Setup together
+2. **Demo: Lakeflow Designer**
+3. **Track A — Lakeflow Designer.** A1, then choose from A2–A6
+4. Lunch
+5. **Demo: Genie Code & agents**
+6. **Track B — Genie Code & agents.** B1 or B2, then B3
+7. **Demo: Apps**
+8. **Track C — Apps.** C1, or C2 if you live with spreadsheets
+9. Wrap-up
 
 ## Setup (once, about 5 minutes)
 
 1. In your workspace: **Workspace → Create → Git folder** → `https://github.com/wryszka/bricksurance-finance-bootcamp`
 2. Open `notebooks/00_setup/01_data_generator`, connect to **Serverless**, and **Run all**.
 
-That creates your own schema, `finance_<your name>`, with 14 tables and ten raw files.
+That creates your own schema, `finance_<your name>`, with 15 tables and ten raw files.
 
 ## The data
 

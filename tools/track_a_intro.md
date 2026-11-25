@@ -1,4 +1,4 @@
-**10:10 demo, then 10:25–12:00 hands-on.** Lakeflow Designer is a canvas: tables on the left,
+**A short demo, then hands-on.** Lakeflow Designer is a canvas: tables on the left,
 steps ("operators") joined by lines, your result on the right. Nothing to install and no code to
 write, although every flow *is* code underneath, which is what makes it schedulable and auditable.
 

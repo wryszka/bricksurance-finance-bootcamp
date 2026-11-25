@@ -1,4 +1,4 @@
-**12:30 demo, then 12:45–14:00 hands-on.** Genie Code is the AI that builds things with you:
+**A short demo, then hands-on.** Genie Code is the AI that builds things with you:
 notebooks, pipelines, dashboards. A Genie agent is the AI your *colleagues* talk to: they ask
 questions in plain English and it answers from your governed tables.
 

@@ -26,18 +26,17 @@ table) and **serverless compute** (nothing to size, start or manage).
 
 ## The day
 
-| Time | What happens |
-|---|---|
-| 10:00 | **Setup** together (10 minutes) |
-| 10:10 | **Demo: Lakeflow Designer** — what to use and where to find it (15 minutes) |
-| 10:25 | **Your turn — Track A.** Start with A1, then choose |
-| 12:00 | Lunch |
-| 12:30 | **Demo: Genie Code & agents** (15 minutes) |
-| 12:45 | **Your turn — Track B.** B1 or B2, then B3 |
-| 14:00 | **Demo: Apps** (15 minutes) |
-| 14:15 | **Your turn — Track C.** C1, or C2 if you live with spreadsheets |
-| 14:55 | Wrap-up: what to take home |
-| 15:00 | Close |
+No clock to fight. The day runs in this order, and each part takes as long as it takes.
+
+1. **Setup**, together.
+2. **Demo: Lakeflow Designer** — what to use and where to find it.
+3. **Your turn — Track A.** Start with A1, then choose.
+4. Lunch.
+5. **Demo: Genie Code & agents.**
+6. **Your turn — Track B.** B1 or B2, then B3.
+7. **Demo: Apps.**
+8. **Your turn — Track C.** C1, or C2 if you live with spreadsheets.
+9. Wrap-up: what to take home.
 
 ## How today works
 
@@ -46,6 +45,8 @@ table) and **serverless compute** (nothing to size, start or manage).
 - **Times are a guide, not a deadline.** Doing two exercises properly beats rushing through five.
 - **Stuck for more than five minutes? Open the solution.** Same name, in the `solutions` folder.
   It has the steps, a prompt that works, and code you can run to catch up. That isn't cheating.
+- **Short on time?** The appendix at the end of this guide has the full prompt for every exercise
+  that one prompt can build.
 - **Wave at a facilitator** whenever you like.
 
 ## Choose your exercises
@@ -78,7 +79,7 @@ table) and **serverless compute** (nothing to size, start or manage).
 4. Top right: **Connect → Serverless**.
 5. Click **Run all**. It takes about two minutes.
 
-✅ **You are ready when** the last cell lists 14 tables. Open **Catalog** in the left sidebar and
+✅ **You are ready when** the last cell lists 15 tables. Open **Catalog** in the left sidebar and
 find your schema, `finance_<your name>`. Everything today lives there, and it is yours alone:
 you cannot break anybody else's data, and they cannot break yours.
 
@@ -111,7 +112,7 @@ Anything **you** build is named `my_…`, so it is easy to find.
 
 # Track A — Lakeflow Designer
 
-**10:10 demo, then 10:25–12:00 hands-on.** Lakeflow Designer is a canvas: tables on the left,
+**A short demo, then hands-on.** Lakeflow Designer is a canvas: tables on the left,
 steps ("operators") joined by lines, your result on the right. Nothing to install and no code to
 write, although every flow *is* code underneath, which is what makes it schedulable and auditable.
 
@@ -450,7 +451,7 @@ be true before a flow you built is allowed to feed a number in the accounts?
 
 # Track B — Genie Code & agents
 
-**12:30 demo, then 12:45–14:00 hands-on.** Genie Code is the AI that builds things with you:
+**A short demo, then hands-on.** Genie Code is the AI that builds things with you:
 notebooks, pipelines, dashboards. A Genie agent is the AI your *colleagues* talk to: they ask
 questions in plain English and it answers from your governed tables.
 
@@ -716,13 +717,13 @@ notebook, paste the same SQL into the **SQL editor** and run it on the SQL wareh
 
 # Track C — Apps
 
-**14:00 demo, then 14:15–14:55 hands-on.** A Databricks App is a small web application that runs
+**A short demo, then hands-on.** A Databricks App is a small web application that runs
 inside your workspace, next to your data, with the same permissions and audit trail. You describe
 it; Genie Code writes it.
 
 **Where to find them:** left sidebar → **Compute → Apps**.
 
-**Suggested route:** there is time for one. C1 if you approve things by email; C2 if you own a
+**Suggested route:** pick one. C1 if you approve things by email; C2 if you own a
 spreadsheet with a macro in it.
 
 ---
@@ -937,3 +938,131 @@ folder, run the generator, and carry on with the exercises you didn't get to.
 *About this bootcamp: all data is synthetic and Bricksurance is a fictional insurer. The legacy
 workflow and spreadsheet macro were written for these exercises and are not any real
 organisation's process.*
+
+---
+
+# Appendix — the full prompts
+
+For the exercises that one prompt can build, here is that prompt in full. Use it when you are short on time, or to compare with what you wrote yourself. Then run the check in the exercise as usual: a prompt that runs is not the same as a number that is right.
+
+Where a prompt says *my schema*, Genie Code usually works it out. If it picks the wrong one, add your schema's full name, for example `workspace.finance_<your name>`.
+
+**Not here:** B3. A Genie agent is something you set up and teach, not something one prompt builds.
+
+## A1 — Your first flow: where does the money go?
+
+**Where to paste it:** the Genie Code prompt above an empty canvas (**New → Visual data prep**).
+
+**Prompt**
+
+> Using 1_supplier_payments and 1_supplier_categories in my schema, keep only payments with status Paid, join to the categories on supplier_name, and show total amount_gbp as total_paid_gbp and the number of payments by category, highest first. Write the result to a table called my_spend_by_category.
+
+## A2 — Bank reconciliation: does the ledger agree with the bank?
+
+**Where to paste it:** the Genie Code prompt above an empty canvas (**New → Visual data prep**).
+
+**Prompt**
+
+> Using 1_gl_cash and 1_bank_statement in my schema: total amount_gbp per bank_account on each side (gl_total_gbp and bank_total_gbp), join the two totals on bank_account, add variance_gbp = ledger minus bank rounded to 2 decimals and a status column that says Reconciled when the variance is zero and Break otherwise. Write to a table called my_bank_rec.
+
+**Prompt for the stretch (`my_bank_rec_breaks`)**
+
+> Add a second branch: full outer join 1_gl_cash to 1_bank_statement on bank_account and reference. Keep rows where the ledger amount is missing, the bank amount is missing, or the two amounts differ. Add a reason column: 'In ledger, not at bank', 'At bank, not in ledger' or 'Amount differs'. Write to a table called my_bank_rec_breaks.
+
+## A3 — The control sheet: do the parts add up to the whole?
+
+**Where to paste it:** the Genie Code prompt above an empty canvas (**New → Visual data prep**).
+
+**Prompt**
+
+> Using 1_supplier_payments (status Paid only) left joined to 1_supplier_categories on supplier_name, add a branch column = company_code + ' / ' + ('Uncategorised' when category is null, 'Preferred' when is_preferred is true, otherwise 'Non-preferred'). Sum amount_gbp as branch_total_gbp by branch and write to a table called my_control_sheet.
+
+## A4 — Describe it, don't draw it: aged debtors
+
+**Where to paste it:** the Genie Code prompt above an empty canvas (**New → Visual data prep**).
+
+**Prompt**
+
+> Using 1_ar_invoices in my schema, build an aged debtors report as at 2026-10-31. Outstanding is amount_gbp minus amount_paid_gbp; ignore invoices with nothing outstanding. Age each invoice by the number of days from due_date to 2026-10-31 and put it in a bucket called 'Not due' (0 days or fewer), '1-30', '31-60', '61-90' or '90+'. Sum outstanding as outstanding_gbp by broker_name and age_bucket. Write the result to a table called my_aged_debtors.
+
+## A5 — Migrate a legacy workflow
+
+**Where to paste it:** the Genie Code prompt above an empty canvas (**New → Visual data prep**).
+
+Paste the whole of `legacy/desktop_etl_workflow/po_accruals_month_end.yxmd` into the prompt first, then this text.
+
+**Prompt**
+
+> This is a legacy workflow exported as XML. Recreate it as a visual data prep. Instead of the two CSV files use the tables 1_purchase_orders and 1_supplier_invoices in my schema. Keep one operator per legacy tool where you can and keep the tool names as operator names. Write the result to a table called my_accruals_summary instead of the spreadsheet.
+
+## A6 — Take a flow to production
+
+**Where to paste it:** the Genie Code prompt above an empty canvas (**New → Visual data prep**).
+
+This builds the flow (Part 1). Scheduling it (Part 2) is still a few clicks.
+
+**Prompt**
+
+> Using 1_supplier_payments, keep Paid payments where the month of payment_date (yyyy-MM) equals a parameter called month, default 2026-10. Sum amount_gbp as total_paid_gbp by supplier_name and write to a table called my_monthly_supplier_spend.
+
+## B1 — Build a pipeline by asking
+
+**Where to paste it:** the **Genie Code** panel in the B1 notebook, after running its first two cells.
+
+This is the bronze, silver and gold prompts of the exercise in one go. The exercise asks you to look at the files first and to prove the silver table; one prompt skips both.
+
+**Prompt**
+
+> The CSV files are in the gl folder of the raw volume in this notebook's schema. Load all the files into a table called my_bronze_gl. Keep every column as text, exactly as it arrived, and add the source file name and a load timestamp. Create my_silver_gl from my_bronze_gl: remove exact duplicate lines, remove test journals (posted_by is TESTUSER), convert posting_date from day/month/year to a date, and convert amount to a number called amount_gbp where brackets mean negative, for example (1,234.50) is -1234.50. Add a period column in yyyy-MM format. Create my_trial_balance: net amount_gbp as net_gbp by period, company_code and account_code, with the account name from 0_accounts.
+
+## B2 — A dashboard in ten minutes
+
+**Where to paste it:** Genie Code inside a new dashboard (**New → Dashboard**).
+
+**Prompt**
+
+> Build a costs-against-budget dashboard from the table 2_actual_vs_budget in my schema, for Expense accounts only, excluding Claims Paid. I want: three headline numbers (actual, budget, variance, in GBP), a monthly line chart of actual against budget, a bar chart of variance by account, and a table of the ten biggest overspends by account and month. Add filters for company and cost centre.
+
+## B4 — Let AI write the first draft of the variance commentary
+
+**Where to paste it:** the **Genie Code** panel in the B4 notebook.
+
+This is the three staged prompts of the exercise in one go.
+
+**Prompt**
+
+> From 2_actual_vs_budget, give me the five biggest absolute variances for Expense accounts in period 2026-09, by account, with actual, budget, variance and variance percent. For each of those accounts, add a column listing the distinct journal descriptions from 2_gl_journal for that account in 2026-09, joined into one text string. Add a commentary column using ai_gen. The prompt should give the account name, actual, budget, variance and the journal descriptions, and ask for at most two sentences in plain English for a finance director, saying whether the variance is adverse or favourable and the likely cause based only on the descriptions. Save the result as a table called my_variance_commentary.
+
+## C1 — Build an app by asking: journal approvals
+
+**Where to paste it:** **Genie Code**, full page.
+
+This writes the app. Deploying it and granting it access to your table are the steps in Part 2 of the exercise.
+
+**Prompt**
+
+> Build a Streamlit app for Databricks Apps called journal approvals, in a new folder in my home directory. It reads the table 3_journal_requests in my schema through a SQL warehouse. Show three headline numbers: pending requests, pending value in GBP, and how many pending requests are £50,000 or more. Show the requests in a table with a filter on status. Let me pick a pending request, type a comment, and click Approve or Reject. Rejecting needs a comment. Write the decision back to the table: status, decided_by (the signed-in user's email) and decision_comment. Warn me when the amount is £50,000 or more. Include app.yaml and requirements.txt.
+
+## C2 — Retire a spreadsheet: from macro to app
+
+**Where to paste it:** **Genie Code**, full page.
+
+For the table, paste the whole of `legacy/spreadsheet_euc/AccrualsTracker.bas` into the prompt first, then the text. The check at the end of the exercise tests the table, not the app.
+
+**Prompt for the table (`my_accruals_review`)**
+
+> Rebuild the macro's calculation as SQL on my tables 1_purchase_orders and 1_supplier_invoices. Create a table called my_accruals_review with company_code, cost_centre, po_count and accrual_gbp. Use a period end of 2026-10-31. Do not copy the macro's row limit.
+
+**Prompt for the app**
+
+> Build a Streamlit app for Databricks Apps that shows my_accruals_review joined to 0_cost_centres: headline numbers for total accrual and number of purchase orders, a company filter, a table that marks lines of £250,000 or more for review, and a bar chart of accrual by cost centre.
+
+## C3 — The same app, with Genie App Builder
+
+**Where to paste it:** **Apps → Build**, in your App Space.
+
+Replace `[catalog.schema]` with your own schema.
+
+**Prompt**
+
+> An app for approving month-end journal requests. It reads the table 3_journal_requests in my schema [catalog.schema]. Show pending requests with their amount, reason and who asked. Let me approve or reject one with a comment, and save the decision to the table with my name. Flag anything of £50,000 or more as needing the Financial Controller.
